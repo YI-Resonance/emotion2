@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<title>表達情緒的方法</title>
+
+<style>
+  body {
+    font-family: "Microsoft JhengHei", sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    margin-bottom: 12px;
+  }
+
+  #image-container {
+    width: 100%;
+    height: 300px;
+    margin: 0 auto 12px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #scene-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  #description {
+    font-size: 1.6rem;
+    min-height: 3.5em;
+    margin-bottom: 16px;
+  }
+
+  .choice-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .choice-btn {
+    padding: 10px 20px;
+    font-size: 1.6rem;
+    border-radius: 6px;
+    border: 1px solid #999;
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+
+  .principle-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .principle-btn {
+    width: 120px;
+    height: 120px;
+    border: 2px solid #999;
+    border-radius: 8px;
+    cursor: pointer;
+    object-fit: contain;
+  }
+
+  .correct {
+    background-color: rgba(0, 200, 0, 0.2);
+    border-color: #2e7d32;
+  }
+
+  .incorrect {
+    background-color: rgba(220, 0, 0, 0.2);
+    border-color: #c62828;
+  }
+
+  .control-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  button {
+    padding: 10px 16px;
+    font-size: 1.4rem;
+    border-radius: 6px;
+    border: 1px solid #999;
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>表達情緒的方法</h1>
+
+<div id="image-container">
+  <img id="scene-image" src="" alt="">
+</div>
+
+<div id="description"></div>
+
+<div class="choice-buttons">
+  <button class="choice-btn" data-answer="proper">恰當</button>
+  <button class="choice-btn" data-answer="improper">不恰當</button>
+</div>
+
+<div class="principle-buttons">
+  <img class="principle-btn" data-principle="self" src="principles/self.webp" alt="不傷害自己">
+  <img class="principle-btn" data-principle="others" src="principles/others.webp" alt="不傷害他人">
+  <img class="principle-btn" data-principle="objects" src="principles/objects.webp" alt="不破壞物件">
+  <img class="principle-btn" data-principle="environment" src="principles/environment.jpg" alt="當時環境許可">
+</div>
+
+<div class="control-buttons">
+  <button id="clear-btn">清除</button>
+  <button id="next-btn">下一題</button>
+</div>
+
+<script>
+/* 12 個情境題目 */
+const questions = [
+  {
+    image: "images/q1.jpg",
+    text: "你在排隊時被同學推了一下。",
+    proper: "深呼吸，冷靜地說：『唔好推我哋排隊啦。』",
+    improper: "反推回去或大叫。",
+    correctChoice: "proper",
+    principles: ["others"]
+  },
+  {
+    image: "images/q2.jpg",
+    text: "你畫的作品被同學弄花了。",
+    proper: "說：『我唔開心，你整花咗我嘅畫。』",
+    improper: "撕爛對方作品。",
+    correctChoice: "proper",
+    principles: ["others", "objects"]
+  },
+  {
+    image: "images/q3.jpg",
+    text: "你最喜歡的文具不見了。",
+    proper: "告訴老師並一起尋找。",
+    improper: "大叫指責同學偷東西。",
+    correctChoice: "proper",
+    principles: ["environment", "objects"]
+  },
+  {
+    image: "images/q4.jpg",
+    text: "你想加入遊戲，但同學說人數夠了。",
+    proper: "說：『下次可唔可以一齊玩？』",
+    improper: "破壞他們的遊戲。",
+    correctChoice: "proper",
+    principles: ["others"]
+  },
+  {
+    image: "images/q5.jpg",
+    text: "你忘記帶功課。",
+    proper: "向老師坦白並補交。",
+    improper: "講大話。",
+    correctChoice: "proper",
+    principles: ["environment"]
+  },
+  {
+    image: "images/q6.jpg",
+    text: "明天要默書，你很擔心。",
+    proper: "請家人陪你練習。",
+    improper: "撕掉練習簿。",
+    correctChoice: "proper",
+    principles: ["self"]
+  },
+  {
+    image: "images/q7.jpg",
+    text: "老師宣布明天要校外旅行。",
+    proper: "開心地分享期待。",
+    improper: "大叫跳動。",
+    correctChoice: "proper",
+    principles: ["environment"]
+  },
+  {
+    image: "images/q8.jpg",
+    text: "你在課堂回答問題時說錯了。",
+    proper: "說：『我講錯咗。』再試一次。",
+    improper: "打自己。",
+    correctChoice: "proper",
+    principles: ["self"]
+  },
+  {
+    image: "images/q9.jpg",
+    text: "你在操場跑步時跌倒。",
+    proper: "請同學或老師幫忙。",
+    improper: "推開想幫你的人。",
+    correctChoice: "proper",
+    principles: ["self", "others"]
+  },
+  {
+    image: "images/q10.jpg",
+    text: "球突然飛向你。",
+    proper: "退後並提醒同學小心。",
+    improper: "踢走球報復。",
+    correctChoice: "proper",
+    principles: ["others"]
+  },
+  {
+    image: "images/q11.jpg",
+    text: "你的手工沒有被選中展示。",
+    proper: "說：『我有啲失望，下次再努力。』",
+    improper: "把手工摔在地上。",
+    correctChoice: "proper",
+    principles: ["objects"]
+  },
+  {
+    image: "images/q12.jpg",
+    text: "朋友小息時沒有等你便去玩了。",
+    proper: "說出你的感受並請他下次等你。",
+    improper: "整天不理朋友。",
+    correctChoice: "proper",
+    principles: ["others"]
+  },
+  {
+    image: "images/q13.jpg",
+    text: "你借了同學的文具，不小心弄壞了。",
+    proper: "說：「對唔住，我唔小心整壞咗，你原諒我嗎？」",
+    improper: "把壞掉的文具還給他假裝沒事。",
+    correctChoice: "proper",
+    principles: ["others", "objects"]
+  },
+  {
+    image: "images/q14.jpg",
+    text: "被同學起了「花名」。",
+    proper: "平靜地表達感受：「我不喜歡你這樣叫我。」",
+    improper: "打他。",
+    correctChoice: "proper",
+    principles: ["others", "self"]
+  }
+
+];
+
+const imgEl = document.getElementById("scene-image");
+const descEl = document.getElementById("description");
+const choiceBtns = document.querySelectorAll(".choice-btn");
+const principleBtns = document.querySelectorAll(".principle-btn");
+const clearBtn = document.getElementById("clear-btn");
+const nextBtn = document.getElementById("next-btn");
+
+let order = [];
+let pointer = 0;
+let currentIndex = -1;
+let currentShownType = ""; // proper 或 improper
+
+/* 洗牌 */
+function shuffleQuestions() {
+  order = [...questions.keys()];
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  pointer = 0;
+}
+
+/* 顯示下一題 */
+function loadNextQuestion() {
+  clearFeedback();
+  if (pointer >= order.length) shuffleQuestions();
+
+  currentIndex = order[pointer++];
+  const q = questions[currentIndex];
+
+  currentShownType = Math.random() < 0.5 ? "proper" : "improper";
+  const shownText = currentShownType === "proper" ? q.proper : q.improper;
+
+  imgEl.src = q.image;
+  descEl.innerHTML = `<b>情境：</b>${q.text}<br><b>表達方法：</b>${shownText}`;
+}
+
+/* 清除所有按鈕效果 */
+function clearFeedback() {
+  choiceBtns.forEach(btn => btn.classList.remove("correct", "incorrect"));
+  principleBtns.forEach(btn => btn.classList.remove("correct", "incorrect"));
+}
+
+/* 第一行：恰當 vs 不恰當 */
+choiceBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    clearFeedback();
+    const chosen = btn.dataset.answer;
+    const correct = currentShownType;
+    btn.classList.add(chosen === correct ? "correct" : "incorrect");
+  });
+});
+
+/* 第二行：四大原則（可多選） */
+principleBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const chosen = btn.dataset.principle;
+    const correctList = questions[currentIndex].principles;
+
+    btn.classList.toggle(
+      correctList.includes(chosen) ? "correct" : "incorrect"
+    );
+  });
+});
+
+clearBtn.addEventListener("click", clearFeedback);
+nextBtn.addEventListener("click", loadNextQuestion);
+
+/* 初始狀態：不載入任何題目 */
+shuffleQuestions();
+imgEl.src = "";
+descEl.textContent = "";
+</script>
+
+</body>
+</html>
